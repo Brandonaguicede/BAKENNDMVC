@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Print & Wear</title>
+
+    <link rel="stylesheet" href="~/css/Pedido.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav>
+            <div>
+                <a href="/">Print & Wear</a>
+                
+                <div id="navbarNav">
+                    <ul>
+                        <li><a href="/Home/Index">Inicio</a></li>
+                        <li><a href="/Carrito_De_Compra/Carrito">Carrito</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div>
+            &copy; 2025 - Print & Wear - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

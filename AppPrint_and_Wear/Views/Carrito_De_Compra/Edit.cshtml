@@ -1,0 +1,49 @@
+﻿@model AppPrint_and_Wear.Models.Carrito_De_Compra
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Editar Carrito";
+}
+
+<h1>Editar Carrito de Compra</h1>
+<h4>Carrito_De_Compra</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Carrito_De_CompraId" />
+
+            <!-- Total (Solo lectura) -->
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" readonly />
+            </div>
+
+            <!-- Cliente -->
+            <div class="form-group">
+                <label asp-for="ClienteId" class="control-label"></label>
+                <select asp-for="ClienteId" class="form-control" asp-items="@(ViewData["ClienteId"] as SelectList)"></select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+
+            <!-- Método de pago -->
+            <div class="form-group">
+                <label asp-for="Metodo_De_PagoId" class="control-label"></label>
+                <select asp-for="Metodo_De_PagoId" class="form-control" asp-items="@(ViewData["Metodo_De_PagoId"] as SelectList)"></select>
+                <span asp-validation-for="Metodo_De_PagoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

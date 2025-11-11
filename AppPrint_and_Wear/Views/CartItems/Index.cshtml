@@ -1,0 +1,62 @@
+﻿@model IEnumerable<AppPrint_and_Wear.Models.CartItem>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Lista de CartItems";
+}
+
+<h1>Lista de CartItems</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Cantidad)</th>
+            <th>@Html.DisplayNameFor(model => model.SubTotal)</th>
+            <th>@Html.DisplayNameFor(model => model.Carrito_De_Compra_Id)</th>
+            <th>Producto</th>
+            <th>Imagen Frente</th>
+            <th>Imagen Espalda</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center">@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                <td class="text-right" style="color: green;">₡@item.SubTotal.ToString("N2")</td>
+                <td class="text-center">@Html.DisplayFor(modelItem => item.Carrito_De_Compra_Id)</td>
+                <td>@item.Productos?.Descripcion</td>
+                <td class="text-center">
+                    @if (!string.IsNullOrEmpty(item.ImagenPersonalizadaFrente))
+                    {
+                        <img src="data:image/png;base64,@item.ImagenPersonalizadaFrente" alt="Frente" style="max-height: 50px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin imagen</span>
+                    }
+                </td>
+                <td class="text-center">
+                    @if (!string.IsNullOrEmpty(item.ImagenPersonalizadaEspalda))
+                    {
+                        <img src="data:image/png;base64,@item.ImagenPersonalizadaEspalda" alt="Espalda" style="max-height: 50px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin imagen</span>
+                    }
+                </td>
+                <td class="text-center">
+                    <a asp-action="Details" asp-route-id="@item.CartItemId" class="btn btn-sm btn-success">Ver</a>
+                    <a asp-action="Edit" asp-route-id="@item.CartItemId" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.CartItemId" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

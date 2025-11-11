@@ -1,0 +1,304 @@
+﻿
+@model TuProyecto.Models.Producto
+
+@{
+    ViewData["Title"] = "Diseñar Ahora";
+    Layout = "_LayoutDiseno";
+}
+
+<input type="hidden" id="productoId" value="@Model?.ProductoId">
+
+<div class="main-content">
+
+    <!-- Panel izquierdo -->
+    <aside class="tools-panel">
+        <div class="section">
+            <div class="tool-button" id="add-image-btn">Añadir imagen</div>
+            <input type="file" id="image-upload" accept="image/*" style="display:none;">
+
+            <div class="text-editor active" id="text-editor">
+                <input type="text" class="text-input" id="design-text" placeholder="Escribe tu texto aquí...">
+                <div class="font-controls">
+                    <select id="font-family">
+                        <option>Arial</option>
+                        <option>Times New Roman</option>
+                        <option>Courier New</option>
+                    </select>
+                    <input type="color" id="text-color" value="#000000">
+                </div>
+                <button class="tool-button" onclick="addTextToDesign()">Aplicar texto</button>
+            </div>
+        </div>
+
+        <div class="guarantee-box left-version">
+            <h4>✅ Garantía & Envío</h4>
+            <ul>
+                <li>Envíos gratis en compras mayores a ₡25.000</li>
+                <li>Creado con materiales amigables con el medio ambiente</li>
+                <li>Atención al cliente 24/7</li>
+            </ul>
+        </div>
+       
+    </aside>
+
+
+    <!-- Panel central -->
+    <section class="preview-panel">
+        <!-- Botones para cambiar entre vista frontal y trasera -->
+        <div class="view-selector">
+            <button class="view-button active" id="front-btn" data-view="front">Frente</button>
+            <button class="view-button" id="back-btn" data-view="back">Espalda</button>
+        </div>
+
+        <!-- Área principal de diseño -->
+        <div class="design-area-container">
+            <div class="design-area">
+
+                <!-- ================= VISTA FRONTAL ================= -->
+                <div id="front-view" class="lawView active">
+                    <div class="product-design">
+                        <!-- Imagen frontal dinámica -->
+                        <img id="shirt-front" class="modelImage" src="@Model?.ImagenUrlFrende" alt="@Model?.Descripcion">
+
+                        <!-- Capa visual (solo decorativa, no bloquea clics) -->
+                        <div class="design-area-overlay front">
+                            <div class="content-inner" id="front-content-inner">
+                                <!-- ✅ Capa editable DENTRO de content-inner -->
+                                <div class="design-elements-layer" id="front-elements-layer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VISTA TRASERA ================= -->
+                <div id="back-view" class="lawView">
+                    <div class="product-design">
+                        <!-- Imagen trasera dinámica -->
+                        <img id="shirt-back" class="modelImage" src="@Model?.ImagenUrlEspalda" alt="@Model?.Descripcion">
+
+                        <!-- Capa visual (solo decorativa, no bloquea clics) -->
+                        <div class="design-area-overlay back">
+                            <div class="content-inner" id="back-content-inner">
+                                <!-- ✅ Capa editable DENTRO de content-inner -->
+                                <div class="design-elements-layer" id="back-elements-layer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div class="text-center mt-3" id="product-info-display">
+            @if (Model != null)
+            {
+                <h4>@Model.Descripcion</h4>
+                <p>Precio: ₡@Model.Precio</p>
+            }
+            else
+            {
+                <p class="text-muted">Selecciona un producto para comenzar a diseñar.</p>
+            }
+        </div>
+    </section>
+
+
+    <!-- Panel derecho -->
+    <aside class="options-panel">
+       
+
+        <div class="section">
+            <div class="section-title">Tallas</div>
+            <div class="size-options">
+                <div class="size-option active">XS</div>
+
+                <div class="size-option ">S</div>
+                <div class="size-option">M</div>
+                <div class="size-option">L</div>
+                <div class="size-option">XL</div>
+                <div class="size-option">XXL</div>
+            </div>
+        </div>
+       
+
+        <!-- Cuadro de Categorías -->
+        <div class="categories-box" id="openCategorias">
+            <h4>🧵 Categorías</h4>
+            <p>Haz clic aquí para explorar las categorías disponibles</p>
+        </div>
+
+        <hr class="divider-pastel">
+
+        <!-- Canvas invisible donde se renderiza la vista previa final -->
+        <canvas id="canvasPersonalizacion" width="400" height="400" style="display:none;"></canvas>
+
+
+        <button class="add-to-cart">
+            <i class="fa fa-shopping-cart"></i> Añadir al carrito
+        </button>
+
+
+      <div class="product-info-buttons">
+    <button id="btnInfo" class="btn-modal">
+        <i class="fa fa-info-circle"></i> Info del producto
+    </button>
+
+    <button id="btnTallas" class="btn-modal alt">
+        <i class="fa fa-ruler"></i> Guía de tallas
+    </button>
+</div>
+
+    </aside>
+</div>
+<!-- Barra de herramientas inferior -->
+<div class="bottom-tools">
+    <div class="zoom-controls">
+        <button class="tool-btn" id="btnZoom"><i class="fa fa-search-plus"></i> Zoom</button>
+        <button class="tool-btn" id="btnPreview"><i class="fa fa-eye"></i> Previo</button>
+        <button class="tool-btn" id="btnReset" onclick="location.href='/Home/Index'">
+            <i class="fa fa-undo"></i> Volver al Inicio
+        </button>
+
+
+    </div>
+</div>
+<!-- Modal de categorías y productos -->
+<div class="modal fade" id="modalCategorias" tabindex="-1" aria-labelledby="modalCategoriasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="justify-content: center; position: relative;">
+                <h5 id="modalCategoriasLabel" class="modal-title">🛍️ Selecciona una categoría</h5>
+
+                <button type="button" id="btnCerrarModalCategorias" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Cerrar"
+                        style="display: block; position: absolute; right: 15px;"></button>
+            </div>
+
+            <div class="modal-body">
+                <h6 class="text-muted mb-2 text-center">Elige una categoría para ver los productos disponibles</h6>
+                <div id="categoriasContainer" class="mb-4"></div>
+                <hr>
+                <h6 class="text-muted mb-3 text-center">Productos disponibles</h6>
+                <div id="productosContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal de Información del Producto - Estilo Tienda -->
+<div id="modalInfo" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal" id="closeInfo">&times;</span>
+
+        <div class="modal-header">
+            <h2>Información del Producto</h2>
+            <p class="subtitle">Calidad, diseño y personalización en cada prenda</p>
+        </div>
+
+        <div class="info-section">
+            <h3>👕 Descripción</h3>
+            <p>
+                Camiseta diseñada para quienes buscan <strong>comodidad y estilo personalizado</strong>.
+                Fabricada con materiales suaves, resistentes y pensada para acompañarte tanto en el día a día como en tus actividades deportivas o creativas.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h3>🧵 Material y confección</h3>
+            <p>
+                - 100% algodón peinado premium (190 g/m²)<br>
+                - Costuras reforzadas en cuello y mangas<br>
+                - Cuello redondo de doble capa para mayor durabilidad
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h3>🎨 Personalización</h3>
+            <p>
+                Personaliza tu prenda con texto, imágenes o logotipos.
+                Cada diseño se imprime con tecnología <strong>DTF y vinil textil premium</strong>, garantizando colores vivos y resistencia al lavado.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h3>🌿 Responsabilidad</h3>
+            <p>
+                Comprometidos con el medio ambiente 🌎.
+                Utilizamos tintas ecológicas y materiales reciclables en el proceso de producción.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h3>🧼 Cuidados del producto</h3>
+            <ul>
+                <li>Lavar a máquina con agua fría (máx. 30 °C).</li>
+                <li>No usar blanqueadores.</li>
+                <li>Planchar del revés, evitando el área del diseño.</li>
+                <li>No secar a altas temperaturas.</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h3>📦 Detalles</h3>
+            <ul>
+                <li>Hecha con materiales nacionales.</li>
+                <li>Garantía de satisfacción y cambio sin costo en los primeros 7 días.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- 📏 Modal Guía de tallas -->
+<div id="modalTallas" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal" id="closeTallas">&times;</span>
+        <h2>Guía de Tallas</h2>
+        <table class="tabla-tallas">
+            <thead>
+                <tr>
+                    <th>Talla</th>
+                    <th>Pecho (cm)</th>
+                    <th>Largo (cm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>S</td>
+                    <td>94-99</td>
+                    <td>69</td>
+                </tr>
+                <tr>
+                    <td>M</td>
+                    <td>99-104</td>
+                    <td>71</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>104-109</td>
+                    <td>73</td>
+                </tr>
+                <tr>
+                    <td>XL</td>
+                    <td>109-117</td>
+                    <td>76</td>
+                </tr>
+                <tr>
+                    <td>XXL</td>
+                    <td>117-124</td>
+                    <td>78</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Cómo medir</h3>
+        <p>Mide tu pecho en la parte más ancha, justo debajo de las axilas.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/diseno.js"></script>
+    <script src="~/js/Carrito.js" asp-append-version="true"></script>
+}
+
+

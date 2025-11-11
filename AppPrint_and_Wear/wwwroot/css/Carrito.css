@@ -1,0 +1,311 @@
+﻿/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Fondo muy claro (casi blanco) y tipografía elegante y limpia */
+    font-family: 'Poppins', 'Arial', sans-serif; /* Poppins o similar Sans-serif limpio */
+    background: #ffffff; /* Blanco puro */
+    color: #111111; /* Negro casi puro para el texto */
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header, .carrito-page .d-flex {
+    background: #ffffff;
+    padding: 18px 30px; /* Un poco más de espacio */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee; /* Borde muy sutil */
+    box-shadow: none; /* Se elimina la sombra */
+}
+
+    .header h1, .carrito-page h2 {
+        font-size: 26px; /* Un poco más grande */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #111111;
+        font-weight: 700;
+        letter-spacing: -0.5px; /* Títulos más definidos */
+    }
+
+/* ===== BOTONES ===== */
+/* Color de acento vibrante (ahora amarillo dorado) */
+#btnVolver, .btn-primary, #btnPagar {
+    background: #c89f2a; /* Color amarillo dorado */
+    color: #fff;
+    border: none;
+    padding: 10px 24px; /* Un poco menos de padding */
+    border-radius: 4px; /* Bordes más rectos/sutiles */
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease; /* Transición simple */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: none; /* Se elimina la sombra inicial */
+    user-select: none;
+    text-transform: uppercase; /* Estilo común en e-commerce minimalista */
+    letter-spacing: 0.5px;
+}
+
+    #btnVolver:hover, .btn-primary:hover, #btnPagar:hover {
+        transform: none; /* Se quita el efecto de levantamiento */
+        background: #9c7c1f; /* Tono más oscuro de amarillo para hover */
+        box-shadow: 0 2px 8px rgba(200, 159, 42, 0.4); /* Sombra sutil al hacer hover */
+    }
+
+/* ===== ITEMS DEL CARRITO ===== */
+#cart-items {
+    display: grid;
+    gap: 16px; /* Menos espacio entre ítems */
+    margin-bottom: 30px;
+}
+
+.cart-item {
+    background: #fff;
+    border-radius: 0; /* Bordes rectos para un look más moderno */
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 100px 1fr auto; /* Imágenes más pequeñas */
+    gap: 20px;
+    align-items: center;
+    border: 1px solid #f0f0f0; /* Borde muy sutil */
+    box-shadow: none;
+    transition: box-shadow 0.2s ease; /* Transición solo para la sombra/borde */
+}
+
+    .cart-item:hover {
+        transform: none; /* Se quita el efecto de levantamiento */
+        box-shadow: 0 0 0 1px #c89f2a inset; /* Borde amarillo al pasar el mouse */
+    }
+
+.item-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    background: #f8f8f8;
+}
+
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Cambiado a 'cover' para un look más de fotografía de moda */
+        transition: transform 0.3s ease;
+    }
+
+.cart-item:hover .item-image img {
+    transform: scale(1.03);
+}
+
+/* Detalles del producto */
+.item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Menos espacio */
+}
+
+    .item-details h5 {
+        font-size: 16px; /* Más pequeño y limpio */
+        color: #111111;
+        font-weight: 600;
+    }
+
+    .item-details .price {
+        font-size: 15px;
+        color: #888888; /* Gris más suave */
+        font-weight: 400;
+    }
+
+    .item-details .quantity {
+        font-size: 14px;
+        color: #555555;
+    }
+
+/* Controles de cantidad y eliminar */
+.item-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+    .btn-group button {
+        background: #f5f5f5; /* Fondo muy claro */
+        border: 1px solid #dddddd; /* Borde sutil */
+        width: 30px;
+        height: 30px;
+        border-radius: 0; /* Cuadrado */
+        font-size: 16px;
+        color: #555555;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+        .btn-group button:hover:not(.disabled) {
+            background: #c89f2a; /* Color amarillo */
+            color: #fff;
+            border-color: #c89f2a;
+        }
+
+        .btn-group button.disabled {
+            cursor: default;
+            background: #f8f8f8;
+            color: #aaaaaa;
+            border-color: #e0e0e0;
+        }
+
+.btn-danger {
+    background: #333333; /* Botón de 'Eliminar' en negro para elegancia */
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    user-select: none;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+    .btn-danger:hover {
+        background: #c89f2a; /* Hover al color amarillo */
+    }
+
+/* Subtotal dentro de item */
+.item-subtotal {
+    background: none; /* Elimina el fondo de color */
+    padding: 5px 0; /* Solo padding vertical */
+    border-radius: 0;
+    color: #111111;
+    font-weight: 700;
+    text-align: right;
+    user-select: none;
+    min-width: 80px;
+    font-size: 16px;
+}
+
+/* ===== TOTAL ===== */
+.total-container {
+    background: #f9f9f9; /* Un ligero gris para destacar */
+    border-radius: 0;
+    padding: 25px 30px;
+    border: 1px solid #eeeeee;
+    box-shadow: none;
+    max-width: 450px;
+    margin: 0 auto 50px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 15px;
+    color: #555555;
+    font-weight: 400;
+    border-bottom: 1px dashed #dddddd; /* Borde más sutil, como una línea discontinua */
+}
+
+    .summary-row.total {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111111;
+        border-bottom: none;
+        padding-top: 15px;
+    }
+
+/* ===== CARRITO VACÍO ===== */
+.cart-empty {
+    background: #fff;
+    border-radius: 4px;
+    padding: 80px 20px;
+    text-align: center;
+    color: #aaaaaa;
+    box-shadow: none;
+    border: 1px solid #eeeeee;
+    max-width: 350px;
+    margin: 60px auto;
+    user-select: none;
+}
+
+    .cart-empty i {
+        font-size: 70px;
+        margin-bottom: 20px;
+        color: #cccccc;
+    }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .header {
+        padding: 15px 15px;
+    }
+
+    .cart-item {
+        grid-template-columns: 80px 1fr auto;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .item-details h5 {
+        font-size: 15px;
+    }
+
+    .item-details .price {
+        font-size: 14px;
+    }
+
+    .total-container {
+        padding: 20px 15px;
+        margin: 20px 10px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-controls {
+        align-items: center;
+    }
+
+    .cart-item {
+        grid-template-columns: 1fr; /* Apilamiento vertical en móviles pequeños */
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .item-image {
+        width: 100%;
+        height: auto;
+        max-height: 120px;
+    }
+
+    .item-details {
+        text-align: center;
+    }
+
+    .item-subtotal {
+        min-width: auto;
+        text-align: center;
+        width: 100%;
+    }
+}

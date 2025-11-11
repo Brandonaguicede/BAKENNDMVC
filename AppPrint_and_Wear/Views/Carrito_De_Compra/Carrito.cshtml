@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Carrito de Compras";
+    Layout = "~/Views/Shared/_LayoutCart.cshtml";
+}
+
+@if (TempData["Error"] != null || ViewBag.Error != null)
+{
+    <div class="alert alert-danger text-center mt-3">
+        @TempData["Error"] ?? ViewBag.Error
+    </div>
+}
+
+<form id="antiForgeryForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<div class="carrito-page container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 header">
+        <h2><i class="fas fa-shopping-cart"></i> Tu Carrito de Compras</h2>
+        <button class="btn btn-primary" onclick="window.location.href='/'">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </button>
+    </div>
+
+    <div id="cart-items" class="cart-items"></div>
+
+    <div id="totalContainer" class="total-container" style="display:none;">
+        <div class="summary-row"><span>Subtotal:</span><span id="subtotal">₡0</span></div>
+        <div class="summary-row"><span>IVA (13%):</span><span id="iva">₡0</span></div>
+        <div class="summary-row"><span>Envío:</span><span id="shipping">₡2,500</span></div>
+        <hr>
+        <div class="summary-row total"><span>Total:</span><span id="total">₡0</span></div>
+
+        <button onclick="cart.proceedToCheckout()" class="btn btn-primary w-100 mt-3 mb-3">
+            <i class="fas fa-lock"></i> Finalizar compra segura
+        </button>
+
+        <button class="btn btn-danger w-100" onclick="cart.clearCart()">🗑️ Vaciar Carrito</button>
+    </div>
+</div>
+
+<!-- 🔹 MODAL LOGIN -->
+<div id="modal-login" class="modal"
+     style="display:none; position:fixed; z-index:999; inset:0; background:rgba(0,0,0,0.6);">
+    <div class="modal-contenido"
+         style="background:#fff; margin:10% auto; padding:20px; border-radius:8px; max-width:400px; position:relative;">
+        <span id="cerrar-login"
+              style="position:absolute; top:10px; right:20px; font-size:24px; cursor:pointer;">&times;</span>
+        <h3 class="text-center">Iniciar Sesión</h3>
+        <div id="mensaje-login" class="text-danger mb-2 text-center"></div>
+
+        <form id="formLogin" method="post" action="/Carrito_De_Compra/Login">
+            @Html.AntiForgeryToken()
+            <input type="email" name="Correo" placeholder="Correo electrónico" required class="form-control mb-2" />
+            <input type="password" name="Contraseña" placeholder="Contraseña" required class="form-control mb-3" />
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+
+        <p class="text-center mt-3">
+            ¿No tienes cuenta?
+            <a href="javascript:void(0)" onclick="abrirModalRegistro()">Regístrate</a>
+        </p>
+    </div>
+</div>
+
+<!-- 🔹 MODAL REGISTRO -->
+<div id="modal-registro" class="modal"
+     style="display:none; position:fixed; z-index:999; inset:0; background:rgba(0,0,0,0.6);">
+    <div class="modal-contenido"
+         style="background:#fff; margin:5% auto; padding:20px; border-radius:8px; max-width:450px; position:relative;">
+        <span id="cerrar-registro"
+              style="position:absolute; top:10px; right:20px; font-size:24px; cursor:pointer;">&times;</span>
+        <h3 class="text-center">Registro de Cliente</h3>
+        <div id="mensaje-registro" class="text-danger mb-2 text-center"></div>
+
+        <form id="formRegistro" method="post" action="/Carrito_De_Compra/Register">
+            @Html.AntiForgeryToken()
+            <input type="text" name="Nombre" placeholder="Nombre" required class="form-control mb-2" />
+            <input type="text" name="Apellidos" placeholder="Apellidos" required class="form-control mb-2" />
+            <input type="email" name="Correo" placeholder="Correo electrónico" required class="form-control mb-2" />
+            <input type="password" name="Contraseña" placeholder="Contraseña" required class="form-control mb-2" />
+            <input type="tel" name="Telefono" placeholder="Teléfono" required class="form-control mb-2" />
+            <input type="text" name="Direccion" placeholder="Dirección" required class="form-control mb-3" />
+            <label for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
+            <input type="date" name="FechaNacimiento" id="FechaNacimiento" required class="form-control mb-3" />
+
+            <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
+        </form>
+
+        <p class="text-center mt-3">
+            ¿Ya tienes cuenta?
+            <a href="javascript:void(0)" onclick="abrirModalLogin()">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Carrito.js" asp-append-version="true"></script>
+
+    
+}

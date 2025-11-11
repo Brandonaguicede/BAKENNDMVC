@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="Factura.css">
+</head>
+<body>
+    <div class="header">
+        <img src="/Imagenes/Logo.png" alt="Logo AppPrint & Wear" style="width:100px;">
+        <h1>Factura Electrónica</h1>
+        <p class="folio">Folio: <strong>{{FOLIO}}</strong></p>
+    </div>
+
+    <div class="cliente-info">
+        <p><strong>Cliente:</strong> {{CLIENTE}}</p>
+        <p><strong>Correo:</strong> {{EMAIL}}</p>
+        <p><strong>Fecha de emisión:</strong> {{FECHA}}</p>
+    </div>
+
+    <table class="detalle">
+        <thead>
+            <tr>
+                <th style="width: 35%;">Producto</th>
+                <th style="width: 30%;">Diseños Personalizados</th>
+                <th style="width: 10%;">Cant.</th>
+                <th style="width: 12%;">Precio Unit.</th>
+                <th style="width: 13%;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{DETALLES}}
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        <div class="total-final">
+            Total: ₡{{TOTAL}}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Gracias por confiar en nosotros.</p>
+        <p><strong>AppPrint & Wear</strong> © 2025</p>
+        <p style="font-size: 11px; color: #999;">
+            Esta es una factura electrónica generada automáticamente.<br>
+            Para cualquier consulta, contacta: ecommercesystem123@gmail.com
+        </p>
+    </div>
+</body>
+</html>

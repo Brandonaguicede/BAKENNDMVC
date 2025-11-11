@@ -1,0 +1,247 @@
+﻿@model AppPrint_and_Wear.Models.Carrito_De_Compra
+
+@{
+    ViewData["Title"] = "Pago";
+    Layout = "~/Views/Shared/_LayoutPedido.cshtml";
+}
+
+<div class="pedido-container">
+    <div class="checkout-header">
+        <h1>Pagar</h1>
+        <div class="checkout-steps">
+            <span class="step active">1. Resumen</span>
+            <span class="step active">2. Pago</span>
+            <span class="step">3. Confirmación</span>
+        </div>
+    </div>
+
+    <div class="pedido-row">
+        <!-- RESUMEN DEL PEDIDO -->
+        <div class="pedido-col-left">
+            <div class="pedido-card">
+                <div class="pedido-card-header">
+                    <h2>Resumen del Pedido</h2>
+                </div>
+
+                <div class="resumen-pedido-grid">
+                    @if (Model.CartItems != null && Model.CartItems.Any())
+                    {
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="resumen-pedido-item">
+                                <div class="imagenes-producto">
+                                    @if (!string.IsNullOrEmpty(item.ImagenPersonalizadaFrente))
+                                    {
+                                        <div class="producto-imagen-wrapper">
+                                            <img src="@item.ImagenPersonalizadaFrente" alt="Frente" />
+                                            <span class="imagen-label">Frente</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="producto-imagen-wrapper">
+                                            <img src="@item.Productos.ImagenUrlFrende" alt="Frente" />
+                                            <span class="imagen-label">Frente</span>
+                                        </div>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(item.ImagenPersonalizadaEspalda))
+                                    {
+                                        <div class="producto-imagen-wrapper">
+                                            <img src="@item.ImagenPersonalizadaEspalda" alt="Espalda" />
+                                            <span class="imagen-label">Espalda</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="producto-imagen-wrapper">
+                                            <img src="@item.Productos.ImagenUrlEspalda" alt="Espalda" />
+                                            <span class="imagen-label">Espalda</span>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="info-producto">
+                                    <h3>@item.Productos.Descripcion</h3>
+                                    <div class="producto-detalles">
+                                        <span>Talla: @item.Talla</span>
+                                        <span>Cantidad: @item.Cantidad</span>
+                                    </div>
+                                    <p class="precio">₡@item.SubTotal.ToString("N0")</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="empty-message">No hay artículos en el carrito</p>
+                    }
+                </div>
+
+                @if (Model.Cliente != null)
+                {
+                    <div class="cliente-info">
+                        <h3>Información de Envío</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">Nombre</span>
+                                <span class="value">@Model.Cliente.Nombre @Model.Cliente.Apellidos</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Correo</span>
+                                <span class="value">@Model.Cliente.Correo</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Teléfono</span>
+                                <span class="value">@Model.Cliente.Telefono</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Dirección</span>
+                                <span class="value">@Model.Cliente.Direccion</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- MÉTODO DE PAGO -->
+            <div class="pedido-card">
+                <div class="pedido-card-header">
+                    <h2>Método de Pago</h2>
+                </div>
+
+                <div class="metodo-pago-section">
+                    <div id="tarjetas-guardadas">
+                        @if (ViewBag.TarjetasCliente != null && ViewBag.TarjetasCliente.Count > 0)
+                        {
+                            <h4 class="subsection-title">Tarjetas Guardadas</h4>
+                            @foreach (var tarjeta in ViewBag.TarjetasCliente)
+                            {
+                                <label class="tarjeta-item">
+                                    <input type="radio"
+                                           name="tarjetaSeleccionada"
+                                           id="tarjeta_@tarjeta.Metodo_De_PagoId"
+                                           value="@tarjeta.Metodo_De_PagoId">
+                                    <div class="tarjeta-content">
+                                        <div class="tarjeta-info">
+                                            <span class="tarjeta-tipo">@tarjeta.Metodo_Tipo</span>
+                                            <span class="tarjeta-nombre">@tarjeta.Nombre</span>
+                                        </div>
+                                        <span class="tarjeta-numero">•••• @tarjeta.Numero_Tarjeta.Substring(tarjeta.Numero_Tarjeta.Length - 4)</span>
+                                    </div>
+                                </label>
+                            }
+                        }
+                        else
+                        {
+                            <p class="empty-message">No hay tarjetas guardadas</p>
+                        }
+                    </div>
+
+                    <button id="btnMostrarFormTarjeta" class="btn-outline">
+                        Agregar Nueva Tarjeta
+                    </button>
+
+                    <!-- Formulario nueva tarjeta -->
+                    <div id="formNuevaTarjeta" class="form-nueva-tarjeta" style="display: none;">
+                        <h4 class="subsection-title">Nueva Tarjeta</h4>
+                        <form id="formTarjeta">
+                            <div class="form-group">
+                                <label>Nombre del Titular</label>
+                                <input type="text" class="form-control" id="nombreTarjeta"
+                                       placeholder="Como aparece en la tarjeta" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Número de Tarjeta</label>
+                                <input type="text" class="form-control" id="numeroTarjeta"
+                                       placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Fecha de Expiración</label>
+                                    <input type="month" class="form-control" id="fechaExpiracion" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" class="form-control" id="cvv"
+                                           placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Guardar Tarjeta</button>
+                                <button type="button" id="btnCancelarTarjeta" class="btn-secondary">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMEN DE TOTALES -->
+        <div class="pedido-col-right">
+            <div class="pedido-card resumen-total">
+                <div class="pedido-card-header">
+                    <h2>Total del Pedido</h2>
+                </div>
+
+                @{
+                    var subtotal = Model.CartItems.Sum(i => i.SubTotal);
+                    var iva = subtotal * 0.13;
+                    var envio = subtotal >= 25000 ? 0 : 2500;
+                    var total = subtotal + iva + envio;
+                }
+
+                <div class="detalle-total">
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <span>₡@subtotal.ToString("N0")</span>
+                    </div>
+                    <div class="total-row">
+                        <span>IVA (13%)</span>
+                        <span>₡@iva.ToString("N0")</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Envío</span>
+                        <span class="@(envio == 0 ? "free-shipping" : "")">
+                            @(envio == 0 ? "GRATIS" : "₡" + envio.ToString("N0"))
+                        </span>
+                    </div>
+                    <div class="total-row total-final">
+                        <span>Total</span>
+                        <span>₡@total.ToString("N0")</span>
+                    </div>
+                </div>
+
+                <button id="btnConfirmarPedido" class="btn-confirmar" data-carrito-id="@Model.Carrito_De_CompraId">
+                    Confirmar Pedido
+                </button>
+
+                <a href="/Carrito_De_Compra/Carrito" class="btn-volver">
+                    Volver al Carrito
+                </a>
+
+                <div class="secure-payment">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Pago Seguro</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.appUrls = {
+            agregarTarjeta: '@Url.Action("AgregarTarjeta", "Pedido")',
+            confirmarPedido: '@Url.Action("ConfirmarPedido", "Pedido")',
+            verificarSesion: '@Url.Action("VerificarSesion", "Pedido")'
+        };
+    </script>
+    <script src="~/js/Pedido.js"></script>
+}

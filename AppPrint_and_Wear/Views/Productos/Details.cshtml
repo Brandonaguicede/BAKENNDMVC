@@ -1,0 +1,55 @@
+﻿@model TuProyecto.Models.Producto
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<h1>Detalles del Producto</h1>
+
+<div class="card shadow-sm p-4">
+    <h4 class="text-primary">Información del producto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+        <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Stock)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Stock)</dd>
+
+        <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Precio)</dt>
+        <dd class="col-sm-9 text-success">₡@Model.Precio.ToString("N2")</dd>
+
+        <dt class="col-sm-3 fw-bold">Imagen (Frente)</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.ImagenUrlFrende))
+            {
+                <img src="@Model.ImagenUrlFrende" alt="Imagen frente" class="img-thumbnail" style="max-width: 200px;" />
+            }
+            else
+            {
+                <span class="text-muted">Sin imagen</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3 fw-bold">Imagen (Espalda)</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.ImagenUrlEspalda))
+            {
+                <img src="@Model.ImagenUrlEspalda" alt="Imagen espalda" class="img-thumbnail" style="max-width: 200px;" />
+            }
+            else
+            {
+                <span class="text-muted">Sin imagen</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Categoria)</dt>
+        <dd class="col-sm-9">@Model.Categoria?.Nombre</dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.ProductoId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>

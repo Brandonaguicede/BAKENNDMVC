@@ -1,0 +1,210 @@
+﻿@model AppPrint_and_Wear.Models.Reporte
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    ViewData["Title"] = "Reportes de Ventas e Inventario";
+}
+
+<link rel="stylesheet" href="~/css/Reporte.css" />
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold text-dark">
+            <i class="fas fa-chart-line text-gold"></i> Reportes de Ventas e Inventario
+        </h2>
+        <div class="btn-group">
+            <a href="@Url.Action("Index", new { periodo = "diario" })"
+               class="btn @(ViewBag.Periodo == "diario" ? "btn-gold" : "btn-outline-gold")">
+                <i class="fas fa-calendar-day"></i> Diario
+            </a>
+            <a href="@Url.Action("Index", new { periodo = "semanal" })"
+               class="btn @(ViewBag.Periodo == "semanal" ? "btn-gold" : "btn-outline-gold")">
+                <i class="fas fa-calendar-week"></i> Semanal
+            </a>
+            <a href="@Url.Action("Index", new { periodo = "mensual" })"
+               class="btn @(ViewBag.Periodo == "mensual" ? "btn-gold" : "btn-outline-gold")">
+                <i class="fas fa-calendar-alt"></i> Mensual
+            </a>
+        </div>
+    </div>
+
+    <p class="text-muted mb-4">
+        Período: <strong class="text-gold">@Model.FechaInicio.ToString("dd/MM/yyyy")</strong>
+        al <strong class="text-gold">@Model.FechaFin.ToString("dd/MM/yyyy")</strong>
+    </p>
+
+    <!-- ====== Resumen ====== -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card text-center">
+                <div class="card-body">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-coins text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">Total Ventas</h5>
+                    <h2 class="fw-bold text-dark">₡@Model.TotalVentas.ToString("N2")</h2>
+                    <p class="text-secondary">@Model.CantidadPedidos pedidos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card text-center">
+                <div class="card-body">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-boxes text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">Total Productos</h5>
+                    <h2 class="fw-bold text-dark">@Model.TotalProductos</h2>
+                    <p class="text-secondary">en inventario</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card text-center">
+                <div class="card-body">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-exclamation-triangle text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">Stock Bajo</h5>
+                    <h2 class="fw-bold text-dark">@Model.ProductosBajoStock</h2>
+                    <p class="text-secondary">productos requieren reposición</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== Ventas por Período ====== -->
+    <div class="card mb-5 border-0 shadow-sm">
+        <div class="card-header bg-dark text-light">
+            <h4 class="mb-0"><i class="fas fa-chart-bar text-gold"></i> Ventas por Período</h4>
+        </div>
+        <div class="card-body bg-light">
+            @if (Model.VentasPorPeriodo.Any())
+            {
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Total Ventas</th>
+                            <th>Pedidos</th>
+                            <th>Promedio por Pedido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var venta in Model.VentasPorPeriodo)
+                        {
+                            var promedio = venta.Pedidos > 0 ? venta.Total / venta.Pedidos : 0;
+                            <tr>
+                                <td>@venta.Fecha.ToString("dddd, dd/MM/yyyy")</td>
+                                <td class="fw-bold text-gold">₡@venta.Total.ToString("N2")</td>
+                                <td><span class="badge bg-secondary">@venta.Pedidos</span></td>
+                                <td>₡@promedio.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-secondary text-center">
+                    <i class="fas fa-info-circle"></i> No hay ventas registradas en este período.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- ====== Top Productos ====== -->
+    <div class="card mb-5 border-0 shadow-sm">
+        <div class="card-header bg-dark text-light">
+            <h4 class="mb-0"><i class="fas fa-trophy text-gold"></i> Top 10 Productos Más Vendidos</h4>
+        </div>
+        <div class="card-body bg-light">
+            @if (Model.ProductosMasVendidos.Any())
+            {
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Cantidad Vendida</th>
+                            <th>Total Ventas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int pos = 1;
+                        }
+                        @foreach (var p in Model.ProductosMasVendidos)
+                        {
+                            var color = pos == 1 ? "text-gold" : pos == 2 ? "text-secondary" : pos == 3 ? "text-danger" : "text-dark";
+                            <tr>
+                                <td class="@color fw-bold">@((pos <= 3) ? (pos == 1 ? "🥇" : pos == 2 ? "🥈" : "🥉") : pos)</td>
+                                <td class="fw-semibold">@p.Nombre</td>
+                                <td><span class="badge bg-secondary">@p.Cantidad</span></td>
+                                <td class="fw-bold text-gold">₡@p.Total.ToString("N2")</td>
+                            </tr>
+                            pos++;
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-secondary text-center">
+                    <i class="fas fa-info-circle"></i> No hay productos vendidos aún.
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-dark text-light">
+            <h4 class="mb-0"><i class="fas fa-warehouse text-gold"></i> Estado del Inventario</h4>
+        </div>
+        <div class="card-body bg-light">
+            <table class="table table-bordered table-sm" id="tablaInventario">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.ProductosInventario)
+                    {
+                        var rowClass = p.Stock < 10 ? "table-danger" : p.Stock < 20 ? "table-warning" : "";
+                        <tr class="@rowClass">
+                            <td>@p.ProductoId</td>
+                            <td class="fw-bold">@p.Nombre</td>
+                            <td>@p.Categoria</td>
+                            <td class="text-center">
+                                <span class="badge @(p.Stock < 10 ? "bg-danger" : p.Stock < 20 ? "bg-warning text-dark" : "bg-success")">
+                                    @p.Stock
+                                </span>
+                            </td>
+                            <td>@p.Alerta</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tablaInventario').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+                pageLength: 10,
+                order: [[3, 'asc']]
+            });
+        });
+    </script>
+}

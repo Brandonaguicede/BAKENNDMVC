@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AppPrint_and_Wear.Models.Carrito_De_Compra>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de carritos</h1>
+
+<p>
+    <a asp-action="Create">Crear uno nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cliente)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.ClienteId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Carrito_De_CompraId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Carrito_De_CompraId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Carrito_De_CompraId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

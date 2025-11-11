@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Panel de Administración</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container d-flex justify-content-between">
+            <h3>EmpresaHome</h3>
+            <nav>
+                <a class="text-white mx-2" asp-controller="HomeEmpresa" asp-action="Index">Inicio</a>
+                <a class="text-white mx-2" asp-controller="Categorias" asp-action="Index">Categoria</a>
+                <a class="text-white mx-2" asp-controller="Carrito_De_Compra" asp-action="Index">Carrito de compra</a>
+                <a class="text-white mx-2" asp-controller="Administradores" asp-action="Index">Administrador</a>
+                <a class="text-white mx-2" asp-controller="CartItems" asp-action="Index">CartItem</a>
+                <a class="text-white mx-2" asp-controller="Envios" asp-action="Index">Envio</a>
+                <a class="text-white mx-2" asp-controller="Metodo_De_Pago" asp-action="Index">Metodo de pago</a>
+                <a class="text-white mx-2" asp-controller="Productos" asp-action="Index">Producto</a>
+                <a class="text-white mx-2" asp-controller="Clientes" asp-action="Index">Cliente</a>
+                <a class="text-white mx-2" asp-controller="Pedido" asp-action="Index">Pedido</a>
+                <a class="text-white mx-2" asp-controller="DetalleFacturas" asp-action="Index">Detalle de facturas</a>
+                <a class="text-white mx-2" asp-controller="Reportes" asp-action="Index">Reporte de ventas</a>
+
+
+
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <footer class="bg-dark text-center text-white p-3 mt-5">
+        © 2025 - Administrador
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

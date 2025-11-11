@@ -1,0 +1,64 @@
+﻿.text-gold {
+    color: #D4AF37 !important;
+}
+
+.bg-gold {
+    background-color: #D4AF37 !important;
+}
+
+.btn-gold {
+    background-color: #D4AF37;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+    .btn-gold:hover {
+        background-color: #b8952f;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+.summary-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .summary-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+.icon-circle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+    .card-header h5 {
+        font-size: 1.1rem;
+    }
+
+.badge {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+body {
+    background-color: #F7F8FA;
+    color: #333;
+}

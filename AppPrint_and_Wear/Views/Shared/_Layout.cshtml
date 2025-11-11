@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="utf-8"2/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+    <title>@ViewData["Title"] - Print & Wear</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/LandingPage.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/AppPrint_and_Wear.styles.css" asp-append-version="true" />
+
+    @RenderSection("HeadContent", required: false)
+</head>
+<body class="@(User.Identity.IsAuthenticated ? "logeado" : "")">
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensaje-error" class="mensaje-error">
+            @TempData["MensajeError"]
+        </div>
+    }
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div id="mensaje-exito" class="mensaje-exito">
+            @TempData["MensajeExito"]
+        </div>
+    }
+
+
+    <header class="superior">
+        <!-- Logo y Carrito juntos a la izquierda -->
+        <div class="logo-carrito-container">
+            <div class="logo">
+                <img src="~/Imagenes/Logo.png" alt="Logo Print & Wear" class="logo" width="200px" />
+            </div>
+
+            <!-- 🛒 Carrito de compras -->
+            <a href="/Carrito_De_Compra/Carrito"
+               class="carrito-icono position-relative text-dark"
+               style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                     fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1
+                     .485.379L2.89 4H14.5a.5.5 0 0 1
+                     .485.621l-1.5 6A.5.5 0 0 1
+                     13 11H4a.5.5 0 0 1-.485-.379L1.61
+                     3H.5a.5.5 0 0 1-.5-.5M3.14
+                     5l1.25 5h8.22l1.25-5zM5
+                     13a1 1 0 1 0 0 2 1 1 0 0 0
+                     0-2m-2 1a2 2 0 1 1 4 0 2 2
+                     0 0 1-4 0m9-1a1 1 0 1 0
+                     0 2 1 1 0 0 0 0-2m-2 1a2 2
+                     0 1 1 4 0 2 2 0 0 1-4 0" />
+                </svg>
+              
+            </a>
+        </div>
+
+        <!-- Toggle del menú móvil -->
+        <input type="checkbox" id="navToggle" class="nav-check" aria-hidden="true">
+
+        <label for="navToggle" class="nav-toggle" aria-controls="navMenu" aria-label="Abrir menú">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </label>
+
+        <!-- Menú de navegación -->
+        <nav class="menu" id="navMenu">
+            <ul class="opciones">
+                <li><a href="#sobre-empresa">Sobre nuestra empresa</a></li>
+                <li><a href="#destacado">Destacado</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#contacto">Contactar</a></li>
+            </ul>
+        </nav>
+
+        <label for="navToggle" class="mobile-backdrop" aria-hidden="true"></label>
+
+        <!-- Usuario (Login/Registro) -->
+        <div class="login">
+            <img src="~/Imagenes/account.png" alt="Menú usuario" class="icono-usuario" id="iconoUsuario" width="40px">
+
+            <div class="btn-flotantes" id="btn-flotantes">
+                <button id="btn-registrarse" class="btn-flotante">Registrarse</button>
+                <button id="btn-login" class="btn-flotante">Iniciar sesión</button>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Contenido principal -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- Footer global -->
+    <footer>
+        <p>&copy; @DateTime.Now.Year Print & Wear - Todos los derechos reservados</p>
+        <a href="#" target="_blank" rel="noopener">Políticas de Privacidad</a> |
+        <a href="#" target="_blank" rel="noopener">Términos y Condiciones</a>
+        <div class="social-footer">
+            <a href="https://www.instagram.com/print.andwear" target="_blank" rel="noopener">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+        <div class="metodos-pago">
+            <img src="~/Imagenes/VisaLogo.png" alt="Visa">
+            <img src="~/Imagenes/MastercardLogo.png" alt="Mastercard">
+            <img src="~/Imagenes/PaypalLogo.png" alt="PayPal">
+        </div>
+    </footer>
+
+   
+
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+  
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

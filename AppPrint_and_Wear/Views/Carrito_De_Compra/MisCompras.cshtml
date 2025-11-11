@@ -1,0 +1,138 @@
+﻿@model AppPrint_and_Wear.Models.HistorialComprasCliente
+
+@{
+    ViewData["Title"] = "Mis Compras";
+    Layout = "~/Views/Shared/_LayoutCart.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/MisCompras.css" />
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold text-dark">
+            <i class="fas fa-history text-gold"></i> Historial de Compras
+        </h2>
+        <button class="btn btn-gold" onclick="window.location.href='/'">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </button>
+    </div>
+
+    <!-- Resumen del Cliente -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-user text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">Cliente</h5>
+                    <h4 class="fw-bold text-dark">@Model.ClienteNombre</h4>
+                    <p class="mb-0 text-secondary">@Model.ClienteEmail</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-shopping-bag text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">Total Compras</h5>
+                    <h2 class="fw-bold text-dark">@Model.TotalCompras</h2>
+                    <p class="mb-0 text-secondary">Pedidos realizados</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card summary-card">
+                <div class="card-body text-center">
+                    <div class="icon-circle bg-gold mb-3">
+                        <i class="fas fa-coins text-white fs-4"></i>
+                    </div>
+                    <h5 class="text-muted">₡ Total Gastado</h5>
+                    <h2 class="fw-bold text-gold">₡@Model.TotalGastado.ToString("N0")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Compras -->
+    @if (Model.Facturas.Any())
+    {
+        @foreach (var factura in Model.Facturas)
+        {
+            <div class="card mb-4 shadow-sm border-0 rounded-4">
+                <div class="card-header bg-dark text-light d-flex justify-content-between align-items-center rounded-top-4">
+                    <div>
+                        <h5 class="mb-1 fw-semibold">
+                            <i class="fas fa-receipt text-gold"></i> Pedido:
+                            <span class="text-gold">@factura.Folio</span>
+                        </h5>
+                        <small class="text-muted">
+                            <i class="far fa-calendar"></i> @factura.FechaEmision.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge @(factura.Estado == "Confirmado" ? "bg-success" : "bg-warning text-dark") me-2">
+                            @factura.Estado
+                        </span>
+                        <span class="badge bg-secondary me-2">
+                            @factura.CantidadProductos productos
+                        </span>
+                        <h4 class="d-inline text-gold mb-0">₡@factura.Total.ToString("N2")</h4>
+                    </div>
+                </div>
+
+                <div class="card-body bg-light">
+                    <div class="row g-3">
+                        @foreach (var detalle in factura.Detalles)
+                        {
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="row g-0">
+                                        <div class="col-4">
+                                            <img src="@detalle.ImagenUrl"
+                                                 alt="@detalle.ProductoNombre"
+                                                 class="img-fluid rounded-start"
+                                                 style="height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="card-body p-2">
+                                                <h6 class="card-title fw-semibold mb-1">@detalle.ProductoNombre</h6>
+                                                <p class="card-text small text-muted mb-1">
+                                                    Cantidad: <strong>@detalle.Cantidad</strong><br />
+                                                    Precio: ₡@detalle.PrecioUnitario.ToString("N2")
+                                                </p>
+                                                <p class="fw-bold text-gold mb-0">
+                                                    ₡@detalle.Subtotal.ToString("N2")
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="card border-0 shadow-sm p-5 bg-light">
+                <div class="card-body">
+                    <i class="fas fa-inbox fa-4x text-secondary mb-3"></i>
+                    <h4 class="fw-bold text-dark">Aún no tienes compras registradas</h4>
+                    <p class="text-muted">Cuando realices tu primera compra, aparecerá aquí.</p>
+                    <a href="/" class="btn btn-gold mt-3">
+                        <i class="fas fa-shopping-bag"></i> Ir a comprar
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
